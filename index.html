@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instamart CLV — PM Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --orange: #E8450A;
+    --orange-light: #FFF2EE;
+    --black: #111;
+    --gray-dark: #444;
+    --gray: #888;
+    --gray-light: #F5F5F5;
+    --border: #E8E8E8;
+    --white: #FFFFFF;
+    --green: #1A7A4A;
+    --green-light: #F0FAF5;
+    --red: #C0392B;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 64px 32px;
+  }
+
+  h1 { font-size: 28px; font-weight: 600; line-height: 1.3; margin-bottom: 8px; }
+  h2 { font-size: 17px; font-weight: 600; margin-bottom: 20px; }
+  h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  p  { color: var(--gray-dark); font-weight: 300; }
+
+  .section { margin-bottom: 64px; }
+  .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+  .header { margin-bottom: 64px; }
+  .header .eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--orange); margin-bottom: 16px;
+  }
+  .header p { font-size: 15px; color: var(--gray); margin-top: 12px; max-width: 520px; }
+
+  .label {
+    font-size: 11px; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--gray); margin-bottom: 20px;
+  }
+
+  /* FORMULA */
+  .formula { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+  .formula-box { border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; flex: 1; min-width: 140px; background: var(--gray-light); }
+  .formula-box.active { background: var(--orange-light); border-color: rgba(232,69,10,0.2); }
+  .formula-box .box-label { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); margin-bottom: 4px; }
+  .formula-box.active .box-label { color: var(--orange); }
+  .formula-box .box-value { font-size: 13px; font-weight: 500; color: var(--black); }
+  .formula-op { font-size: 18px; color: var(--gray); font-weight: 300; }
+  .formula-eq { font-size: 18px; color: var(--orange); font-weight: 500; }
+
+  /* GRIDS */
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .two-col   { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* CARDS */
+  .card { border: 1px solid var(--border); border-radius: 8px; padding: 24px; background: var(--white); }
+  .card.active { border-color: rgba(232,69,10,0.25); background: var(--orange-light); }
+  .card.muted  { background: var(--gray-light); }
+  .card .card-tag { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+  .card.muted .card-tag { color: var(--gray); }
+  .card p { font-size: 13px; margin-top: 6px; }
+
+  /* STATS */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+  .stat { border: 1px solid var(--border); border-radius: 8px; padding: 20px; text-align: center; }
+  .stat .num { font-size: 26px; font-weight: 600; margin-bottom: 6px; }
+  .stat .num.red    { color: var(--red); }
+  .stat .num.orange { color: var(--orange); }
+  .stat p { font-size: 12px; color: var(--gray); }
+
+  /* CAUSAL CHAIN */
+  .chain { display: flex; align-items: stretch; gap: 0; margin: 32px 0; overflow-x: auto; }
+  .chain-box { flex: 1; min-width: 120px; padding: 16px 14px; border: 1px solid var(--border); border-right: none; background: var(--gray-light); text-align: center; }
+  .chain-box:first-child { border-radius: 6px 0 0 6px; border-left: 2px solid var(--red); }
+  .chain-box:last-child  { border-radius: 0 6px 6px 0; border-right: 1px solid var(--border); border-left: none; background: var(--orange-light); }
+  .chain-box .c-label { font-size: 9px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); margin-bottom: 6px; }
+  .chain-box .c-text { font-size: 12px; font-weight: 500; color: var(--black); }
+  .chain-box:last-child .c-text { color: var(--orange); }
+  .chain-sep { display: flex; align-items: center; padding: 0 2px; background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 12px; color: var(--gray); }
+
+  /* TREE */
+  .tree { text-align: center; }
+  .tree-root-node { display: inline-block; background: var(--black); color: var(--white); font-size: 14px; font-weight: 500; padding: 14px 28px; border-radius: 6px; }
+  .tree-line-v { width: 1px; height: 28px; background: var(--border); margin: 0 auto; }
+  .tree-h-container { display: flex; justify-content: center; gap: 24px; position: relative; }
+  .tree-h-container::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 70%; height: 1px; background: var(--border); }
+  .tree-col { flex: 1; max-width: 220px; display: flex; flex-direction: column; align-items: center; }
+  .tree-col-line { width: 1px; height: 28px; background: var(--border); }
+  .tree-level1-node { background: var(--orange-light); border: 1px solid rgba(232,69,10,0.2); color: var(--orange); font-size: 12px; font-weight: 500; padding: 10px 16px; border-radius: 6px; text-align: center; width: 100%; margin-bottom: 12px; }
+  .tree-children { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .tree-child { border: 1px solid var(--border); border-radius: 5px; padding: 10px 14px; font-size: 12px; color: var(--gray-dark); background: var(--gray-light); text-align: left; }
+  .tree-child.focus { border-color: rgba(232,69,10,0.2); background: var(--orange-light); }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .step-n { font-size: 11px; font-weight: 600; color: var(--orange); background: var(--orange-light); border-radius: 4px; padding: 2px 8px; flex-shrink: 0; margin-top: 1px; }
+  .step p { font-size: 13px; }
+
+  /* METRIC CHAIN */
+  .metric-chain { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 24px; }
+  .metric-pill { border: 1px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 12px; font-weight: 500; background: var(--gray-light); color: var(--gray-dark); }
+  .metric-pill.north-star { background: var(--green-light); border-color: rgba(26,122,74,0.2); color: var(--green); }
+  .metric-arrow { color: var(--gray); font-size: 14px; }
+
+  /* STAKEHOLDER */
+  .stakeholder-card { border: 1px solid var(--border); border-radius: 8px; padding: 24px; background: var(--white); }
+  .stakeholder-card .who { font-size: 12px; font-weight: 500; color: var(--gray); margin-bottom: 6px; }
+  .stakeholder-card .impact { margin-top: 12px; font-size: 12px; color: var(--green); font-weight: 500; }
+
+  .footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 11px; color: var(--gray); letter-spacing: 0.5px; }
+
+  @media (max-width: 640px) {
+    body { padding: 40px 20px; }
+    .three-col, .stats { grid-template-columns: 1fr 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .tree-h-container { flex-direction: column; align-items: center; }
+    .tree-h-container::before { display: none; }
+    .formula { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="eyebrow">PM Case Study · Swiggy Instamart</div>
+  <h1>Why Instamart is losing users before the habit forms</h1>
+  <p>A CLV-first breakdown of the order accuracy problem, its business impact, and what product should build to fix it.</p>
+</div>
+
+<!-- 01 FRAMEWORK -->
+<div class="section">
+  <div class="label">01 — Framework</div>
+  <h2>What actually drives CLV?</h2>
+
+  <div class="formula">
+    <div class="formula-box active">
+      <div class="box-label">Lever A · Our Focus</div>
+      <div class="box-value">Avg. years customer stays</div>
+    </div>
+    <div class="formula-op">×</div>
+    <div class="formula-box active">
+      <div class="box-label">Lever B · Our Focus</div>
+      <div class="box-value">Avg. orders per year</div>
+    </div>
+    <div class="formula-op">×</div>
+    <div class="formula-box">
+      <div class="box-label">Lever C · Out of Scope</div>
+      <div class="box-value">Avg. order value</div>
+    </div>
+    <div class="formula-eq">=</div>
+    <div class="formula-box" style="border-color:rgba(26,122,74,0.2); background:var(--green-light);">
+      <div class="box-label" style="color:var(--green)">Output</div>
+      <div class="box-value" style="color:var(--green)">Customer Lifetime Value</div>
+    </div>
+  </div>
+
+  <div class="three-col">
+    <div class="card active">
+      <div class="card-tag">Lever A — Focus</div>
+      <h3>Increase retention duration</h3>
+      <p>A user who churns after the first order contributes zero to CLV. Fixing first-order experience is the fastest way to extend how long a user stays.</p>
+    </div>
+    <div class="card active">
+      <div class="card-tag">Lever B — Focus</div>
+      <h3>Increase order frequency</h3>
+      <p>Quick commerce unit economics only work at 3–4 orders/month per user. A user stuck at 1 total order makes acquisition spend structurally unprofitable.</p>
+    </div>
+    <div class="card muted">
+      <div class="card-tag">Lever C — Not Now</div>
+      <h3>Increase order value</h3>
+      <p>Cross-sells and upsells are useful only after the user trusts the platform enough to return. Fix retention first.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 02 PROBLEM -->
+<div class="section">
+  <div class="label">02 — The Problem</div>
+  <h2>Where CLV is actually breaking</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num red">5–8%</div>
+      <p>Order error rate at dark stores</p>
+    </div>
+    <div class="stat">
+      <div class="num orange">40–50%</div>
+      <p>Users who never reorder after a bad first experience</p>
+    </div>
+    <div class="stat">
+      <div class="num" style="color:#888">14 days</div>
+      <p>Critical F1→F2 conversion window</p>
+    </div>
+    <div class="stat">
+      <div class="num red">500K+</div>
+      <p>Daily orders — 1% error = thousands of users lost</p>
+    </div>
+  </div>
+
+  <p style="margin-bottom:32px;">The problem isn't that users dislike Instamart. It's that a bad first order — wrong item, underweight produce, missing SKU — hits before the habit loop can form. After that, switching to Blinkit costs nothing.</p>
+
+  <div class="label">Causal Chain</div>
+  <div class="chain">
+    <div class="chain-box">
+      <div class="c-label">Root Cause</div>
+      <div class="c-text">Order accuracy failure at dark store</div>
+    </div>
+    <div class="chain-sep">→</div>
+    <div class="chain-box">
+      <div class="c-label">User Experience</div>
+      <div class="c-text">Wrong item / wrong weight on first order</div>
+    </div>
+    <div class="chain-sep">→</div>
+    <div class="chain-box">
+      <div class="c-label">Short-Term Signal</div>
+      <div class="c-text">Support ticket raised, refund issued</div>
+    </div>
+    <div class="chain-sep">→</div>
+    <div class="chain-box">
+      <div class="c-label">Retention Impact</div>
+      <div class="c-text">F1→F2 conversion drops, user churns</div>
+    </div>
+    <div class="chain-sep">→</div>
+    <div class="chain-box">
+      <div class="c-label">Business Impact</div>
+      <div class="c-text">CLV collapses. Acquisition spend wasted.</div>
+    </div>
+  </div>
+
+  <div class="label" style="margin-top:40px;">Problem Breakdown</div>
+  <div class="tree">
+    <div class="tree-root-node">CLV collapses after the first order</div>
+    <div class="tree-line-v"></div>
+    <div class="tree-h-container">
+      <div class="tree-col">
+        <div class="tree-col-line"></div>
+        <div class="tree-level1-node">Lever A broken<br>Retention → 0</div>
+        <div class="tree-children">
+          <div class="tree-child focus">Bad F1 experience</div>
+          <div class="tree-child focus">Never returns in 14-day window</div>
+          <div class="tree-child">Switches to Blinkit / Zepto</div>
+        </div>
+      </div>
+      <div class="tree-col">
+        <div class="tree-col-line"></div>
+        <div class="tree-level1-node">Lever B broken<br>Frequency stays at 1</div>
+        <div class="tree-children">
+          <div class="tree-child focus">Habit loop never forms</div>
+          <div class="tree-child">No trust built with platform</div>
+          <div class="tree-child">Acquisition spend doesn't compound</div>
+        </div>
+      </div>
+      <div class="tree-col">
+        <div class="tree-col-line"></div>
+        <div class="tree-level1-node">Root causes of F1 failure</div>
+        <div class="tree-children">
+          <div class="tree-child">Speed incentivised over accuracy</div>
+          <div class="tree-child">Catalog mismatch — item shown, shelf empty</div>
+          <div class="tree-child">No real-time ops accountability loop</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 03 STAKEHOLDERS -->
+<div class="section">
+  <div class="label">03 — Stakeholders</div>
+  <h2>Who is directly affected?</h2>
+  <p style="margin-bottom:24px;">The delivery partner is out of scope — they carry what's already packed. The failure happens upstream, before they're involved.</p>
+
+  <div class="two-col">
+    <div class="stakeholder-card">
+      <div class="who">Stakeholder 1</div>
+      <h3>Consumer</h3>
+      <p>Wants the right order, right weight, every time. A single failure destroys trust that takes many good experiences to rebuild. Zero switching cost — Blinkit is one tap away.</p>
+      <div class="impact">↑ Better F1 experience → stays, reorders, forms habit</div>
+    </div>
+    <div class="stakeholder-card">
+      <div class="who">Stakeholder 2</div>
+      <h3>Swiggy / Instamart</h3>
+      <p>Needs habitual orderers for unit economics to work. Every churned F1 user is acquisition cost with zero LTV return. High refund and ticket volume is a direct cost drain.</p>
+      <div class="impact">↑ Higher accuracy → lower refunds, higher F1→F2, better CLV</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 04 SOLUTION -->
+<div class="section">
+  <div class="label">04 — Solution</div>
+  <h2>What product should build</h2>
+  <p style="margin-bottom:32px;">Scanning and weight tools already exist at Instamart. The gap isn't tooling — it's accountability and incentive design. Fix the feedback loop, fix the behaviour.</p>
+
+  <div class="two-col">
+    <div class="card" style="border-color:rgba(232,69,10,0.2);">
+      <div class="card-tag">Solution 1 · Ops Product</div>
+      <h3>Real-Time Picker Accuracy Scorecard</h3>
+      <p>A live accuracy dashboard for dark store ops leads — error rate per picker, per shift. A live feed, not a weekly report.</p>
+      <div class="steps">
+        <div class="step"><span class="step-n">01</span><p>Track error rate per picker per shift using existing scan data</p></div>
+        <div class="step"><span class="step-n">02</span><p>Surface as a live leaderboard visible to ops lead in real time</p></div>
+        <div class="step"><span class="step-n">03</span><p>Alert ops lead if a picker's error rate crosses threshold mid-shift</p></div>
+        <div class="step"><span class="step-n">04</span><p>Tie picker accuracy score to weekly incentive structure</p></div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(232,69,10,0.2);">
+      <div class="card-tag">Solution 2 · Catalog Product</div>
+      <h3>Substitution Consent Flow + Catalog Sync</h3>
+      <p>Catalog mismatches cause silent substitutions. Build a consent layer and tighten inventory sync so users are never surprised.</p>
+      <div class="steps">
+        <div class="step"><span class="step-n">01</span><p>Flag SKUs with >5% stockout frequency in last 7 days as "low confidence"</p></div>
+        <div class="step"><span class="step-n">02</span><p>Push in-app notification before dispatch if substitution occurs — user can accept or cancel</p></div>
+        <div class="step"><span class="step-n">03</span><p>Track substitution acceptance rate as a catalog health metric</p></div>
+        <div class="step"><span class="step-n">04</span><p>Deprioritise consistently unavailable SKUs from top search results</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 05 METRICS -->
+<div class="section">
+  <div class="label">05 — Success Metrics</div>
+  <h2>How we know it's working</h2>
+  <p>Ticket volume/day is the fastest feedback signal. F1→F2 conversion is the slower but truer measure of whether the CLV problem is fixed at its root.</p>
+
+  <div class="metric-chain">
+    <div class="metric-pill">Picker accuracy ↑</div>
+    <div class="metric-arrow">→</div>
+    <div class="metric-pill">Support tickets/day ↓</div>
+    <div class="metric-arrow">→</div>
+    <div class="metric-pill">Refund rate ↓</div>
+    <div class="metric-arrow">→</div>
+    <div class="metric-pill north-star">F1→F2 within 14 days ↑</div>
+    <div class="metric-arrow">→</div>
+    <div class="metric-pill" style="background:var(--green-light); border-color:rgba(26,122,74,0.2); color:var(--green);">CLV per new user ↑</div>
+  </div>
+</div>
+
+<div class="footer">
+  Instamart CLV Case Study · Ashwini Mishra · APM Application
+</div>
+
+</body>
+</html>
